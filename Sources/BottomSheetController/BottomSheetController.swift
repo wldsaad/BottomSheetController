@@ -33,7 +33,8 @@ public class BottomSheetController: UIViewController {
     @IBOutlet private var bottomFiller: UIView!
     @IBOutlet private var container: UIView!
     @IBOutlet private var position: NSLayoutConstraint!
-
+    @IBOutlet weak var sheetBottomConstraint: NSLayoutConstraint!
+    
     /// Background color of sheet's background.
     public var backgroundColor: UIColor = .init(white: 0, alpha: 0.5) {
         didSet {
@@ -48,6 +49,8 @@ public class BottomSheetController: UIViewController {
         }
     }
 
+    public var adaptsToKeyboard = true
+    
     private var transition: CGFloat = 0
     private var sheetHeight: CGFloat = 0
     private let contentView: UIView
@@ -102,6 +105,8 @@ public class BottomSheetController: UIViewController {
         if let contentViewController = contentViewController {
             contentViewController.didMove(toParent: self)
         }
+        
+        observeKeyboardNotifications()
     }
 
     public override func viewWillAppear(_ animated: Bool) {
@@ -191,6 +196,40 @@ public class BottomSheetController: UIViewController {
         }
     }
 
+    private func observeKeyboardNotifications() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    @objc
+    private func keyboardWillShow(_ notification: Notification) {
+        guard adaptsToKeyboard,
+              let userInfo = notification.userInfo,
+              let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
+        
+        let animationDuration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double ?? 0.25
+        let animationCurve = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? UInt ?? 7
+        
+        sheetBottomConstraint.constant = keyboardFrame.size.height
+        UIView.animate(withDuration: animationDuration, delay: 0, options: UIView.AnimationOptions(rawValue: animationCurve << 16)) { [weak self] in
+            self?.view.layoutIfNeeded()
+        }
+    }
+    
+    @objc
+    private func keyboardWillHide(_ notification: Notification) {
+        guard adaptsToKeyboard,
+              let userInfo = notification.userInfo else { return }
+        
+        let animationDuration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double ?? 0.25
+        let animationCurve = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? UInt ?? 7
+        
+        sheetBottomConstraint.constant = 0
+        UIView.animate(withDuration: animationDuration, delay: 0, options: UIView.AnimationOptions(rawValue: animationCurve << 16)) { [weak self] in
+            self?.view.layoutIfNeeded()
+        }
+    }
+    
     @IBAction private func didPan(_ gestureRecognizer: UIPanGestureRecognizer) {
         switch gestureRecognizer.state {
         case .began:
