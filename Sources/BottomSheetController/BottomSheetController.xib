@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -18,6 +18,7 @@
                 <outlet property="position" destination="HlX-Xc-7WA" id="mWs-oR-8Kz"/>
                 <outlet property="roundedHeader" destination="cyk-5k-dVd" id="gZr-MH-C4Q"/>
                 <outlet property="sheet" destination="mc5-FO-5Xo" id="sL2-xA-Kk7"/>
+                <outlet property="sheetBottomConstraint" destination="aBj-Qq-aNW" id="bpp-sc-MPf"/>
                 <outlet property="view" destination="iN0-l3-epB" id="2Ho-Lb-qWX"/>
             </connections>
         </placeholder>
